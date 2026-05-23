@@ -73,6 +73,10 @@ source install/setup.bash
 
 ## Launch Instructions
 
+This package supports both the Unity Mars simulation and the physical TurtleBot setup. The simulation uses `params_sim.yaml`, while the physical robot uses `params_physical.yaml`.
+
+### Simulation Launch
+
 Start the Unity Mars simulation in the first terminal:
 
 ```bash
@@ -80,7 +84,9 @@ cd ~/algorithmic-robots-world
 docker compose -f compose-simulation.yaml up
 ```
 
-Launch the full SLAM, planning, and navigation pipeline in a second terminal:
+In the Unity simulation, switch the rover to Autonomous mode before launching the mission.
+
+Launch the full simulation pipeline in a second terminal:
 
 ```bash
 cd ~/algorithmic-robots-world/workspace/succulence_ws
@@ -95,6 +101,47 @@ cd ~/algorithmic-robots-world/workspace/succulence_ws
 source install/setup.bash
 rviz2 -d src/succulence_rover_ros/config/succulance_slam.rviz
 ```
+
+The simulation mission should run the full SLAM, A* planning, and navigation pipeline. The rover should build the SLAM map, publish a planned path on `/succulence/plan`, and drive using `/cmd_vel`.
+
+### Physical Robot Launch
+
+Before using the physical robot, stop the simulation containers so there are no duplicate `/scan` or `/odom` topics:
+
+```bash
+cd ~/algorithmic-robots-world
+docker compose -f compose-simulation.yaml down
+```
+
+Connect to the physical Succulence rover/TurtleBot network and make sure the required robot drivers are running.
+
+To run physical SLAM only:
+
+```bash
+cd ~/algorithmic-robots-world/workspace/succulence_ws
+source install/setup.bash
+ros2 launch succulence_rover_ros slam_physical.launch.py
+```
+
+To run the full physical mission:
+
+```bash
+cd ~/algorithmic-robots-world/workspace/succulence_ws
+source install/setup.bash
+ros2 launch succulence_rover_ros mission_physical.launch.py
+```
+
+The physical launch file uses the physical parameter file and starts with the `/reset_pose` service so the robot odometry begins from zero. After the reset returns successfully, the static TF publishers, SLAM node, planner node, and navigator node start.
+
+Open RViz2 with the SLAM configuration:
+
+```bash
+cd ~/algorithmic-robots-world/workspace/succulence_ws
+source install/setup.bash
+rviz2 -d src/succulence_rover_ros/config/succulance_slam_physical.rviz
+```
+
+If needed, the simulation RViz config can also be reused by changing the fixed frame and topic settings inside RViz2.
 
 ## Useful Debug Commands
 
@@ -127,4 +174,3 @@ ros2 topic echo /cmd_vel
 - Nima
 - Bishaw
 - Joe
-- 
