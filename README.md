@@ -81,6 +81,7 @@ Start the Unity Mars simulation in the first terminal:
 
 ```bash
 cd ~/algorithmic-robots-world
+xhost +local:root
 docker compose -f compose-simulation.yaml up
 ```
 
