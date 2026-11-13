@@ -1,5 +1,7 @@
 # Succulence Rover: Systems Overview
 
+> **Note:** This architecture guide was provided by the 12062 Algorithmic Robotics teaching team at the University of Canberra. It is kept here as a reference for how the components in this repository fit together. See the main [README](../README.md) for how to build and run the project.
+
 > **Your reference map for Weeks 5–10.** Come back to this whenever you need to see where your current work fits into the bigger picture.
 
 ## The Mission
